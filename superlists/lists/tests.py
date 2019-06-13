@@ -1,15 +1,9 @@
 from django.test import TestCase
-from django.urls import resolve
 
 from lists.models import Item
-from lists.views import home_page
 
 
 class HomePageTest(TestCase):
-    def test_root_url_resolves_to_home_page_view(self):
-        found = resolve('/')
-        self.assertEqual(found.func, home_page)
-
     def test_home_page_returns_correct_htmt(self):
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
@@ -30,15 +24,6 @@ class HomePageTest(TestCase):
     def test_only_saves_items_when_necessary(self):
         self.client.get('/')
         self.assertEqual(Item.objects.count(), 0)
-
-    def test_displays_all_list_items(self):
-        Item.objects.create(text='itemey 1')
-        Item.objects.create(text='itemey 2')
-
-        response = self.client.get('/')
-
-        self.assertIn('itemey 1', response.content.decode())
-        self.assertIn('itemey 2', response.content.decode())
 
 
 class ItemModelTest(TestCase):
@@ -67,3 +52,7 @@ class ListViewTest(TestCase):
 
         self.assertContains(response, 'itemey 1')
         self.assertContains(response, 'itemey 2')
+
+    def test_uses_list_template(self):
+        response = self.client.get('/lists/the-only-list-in-the-world/')
+        self.assertTemplateUsed(response, 'list.html')
