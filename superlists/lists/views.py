@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect
 
-from lists.models import Item
+from lists.models import Item, List
 
 
 def home_page(request):
@@ -16,6 +16,7 @@ def view_list(request):
 
 
 def new_list(request):
+    list_ = List.objects.create()
     new_item = request.POST['item_text']
-    Item.objects.create(text=new_item)
+    Item.objects.create(text=new_item, list=list_)
     return redirect('/lists/the-only-list-in-the-world/')
