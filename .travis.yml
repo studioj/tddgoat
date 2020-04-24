@@ -3,7 +3,7 @@ os:
 language:
   python
 addons:
-  firefox: "57.0"
+  firefox: latest
   apt:
     packages:
       firefox-geckodriver
